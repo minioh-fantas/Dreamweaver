@@ -1,0 +1,15 @@
+me\minioh\firstPlugin\ItemPage\MultiPagePlugin.class
+me\minioh\firstPlugin\listeners\MMOInventoryEvent.class
+me\minioh\firstPlugin\listeners\PlayerJoinLeaveListener.class
+me\minioh\firstPlugin\ItemPage\LorePagesGUI.class
+me\minioh\firstPlugin\commands\SummonZombieCooldown.class
+me\minioh\firstPlugin\listeners\PlayerDeathListener.class
+me\minioh\firstPlugin\commands\SetSpawn.class
+me\minioh\firstPlugin\commands\TpSpawn.class
+me\minioh\firstPlugin\commands\Dreamreload.class
+me\minioh\firstPlugin\commands\MiniohPluginCommands.class
+me\minioh\firstPlugin\FirstPlugin.class
+me\minioh\firstPlugin\commands\RepeatCommand.class
+me\minioh\firstPlugin\listeners\OPSnowball.class
+me\minioh\firstPlugin\commands\SuperStrongEffect.class
+me\minioh\firstPlugin\ItemPage\LorePagesStat.class

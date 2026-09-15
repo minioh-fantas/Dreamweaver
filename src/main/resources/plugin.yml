@@ -1,0 +1,35 @@
+name: Dreamweaver
+version: '1.0-SNAPSHOT'
+main: me.minioh.firstPlugin.ItemPage.MultiPagePlugin
+  #me.minioh.firstPlugin.FirstPlugin
+api-version: '1.21'
+author: Minioh
+description: 'Dreamweaver core plugin'
+commands:
+  hjhj:
+    description: An occhim command.
+    permission: minioh.test.hjhj
+    permission-message: You dont occhim enough to run this command.
+  repeat:
+    description: Simple command that repeat what you say.
+    permission: minioh.test.repeat
+    permission-message: You dont handsome enough to run this command.
+  sm:
+    description: Give you or another player strong effect.
+    permission: minioh.test.sm
+    permission-message: You dont have permission to run this command.
+  setspawnn:
+    description: Set the spawn point so you can teleport to using /spawnn
+  spawnn:
+    description: Teleport to the spawn point (make sure you /setspawnn to set the spawn point before)
+  dreamreload:
+    description: Reload the plugin!
+  zspawn:
+    description: Summon a Zombie with 10s cooldown.
+  pageedit:
+    description: edit page test
+permissions:
+  minioh.test.hjhj:
+    description: You are really occhim
+  minioh.test.repeat:
+    description: Use repeat command.

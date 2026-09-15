@@ -1,0 +1,9 @@
+spawn:
+ world: world
+ x: 0
+ y: 0
+ z: 0
+ pitch: 0
+ yaw: 0
+join-message: "&aWelcome back, &c%player_name% &athe Tarnished"
+leave-message: "&c%player_name% &dhas move to The Dream"
