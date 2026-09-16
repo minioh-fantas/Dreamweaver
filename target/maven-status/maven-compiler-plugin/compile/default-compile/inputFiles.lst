@@ -1,13 +1,17 @@
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\Dreamreload.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\MiniohPluginCommands.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\RepeatCommand.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\SetSpawn.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\SummonZombieCooldown.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\SuperStrongEffect.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\commands\TpSpawn.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\FirstPlugin.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\ItemPage\MultiPagePlugin.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\listeners\MMOInventoryEvent.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\listeners\OPSnowball.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\listeners\PlayerDeathListener.java
-C:\Users\Admin\Documents\First Plugin\src\main\java\me\minioh\firstPlugin\listeners\PlayerJoinLeaveListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\Dreamreload.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\MiniohPluginCommands.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\RepeatCommand.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\SetSpawn.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\SummonZombieCooldown.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\SuperStrongEffect.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\TpSpawn.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\FirstPlugin.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ChatInputListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LoreGUIHandler.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LorePagesStat.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\MultiLorePlugin.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\PageFlipListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\MMOInventoryEvent.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\OPSnowball.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\PlayerDeathListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\PlayerJoinLeaveListener.java

@@ -1,9 +1,11 @@
 name: Dreamweaver
 version: '1.0-SNAPSHOT'
-main: me.minioh.firstPlugin.ItemPage.MultiPagePlugin
+main: me.minioh.firstPlugin.ItemPage.MultiLorePlugin
   #me.minioh.firstPlugin.FirstPlugin
 api-version: '1.21'
 author: Minioh
+depend: [MMOItems, MythicLib]
+
 description: 'Dreamweaver core plugin'
 commands:
   hjhj:
