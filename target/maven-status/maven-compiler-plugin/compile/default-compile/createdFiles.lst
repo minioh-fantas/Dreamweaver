@@ -13,7 +13,11 @@ me\minioh\firstPlugin\listeners\PlayerJoinLeaveListener.class
 me\minioh\firstPlugin\commands\SummonZombieCooldown.class
 me\minioh\firstPlugin\ItemPage\MultiLorePlugin$PendingInput.class
 me\minioh\firstPlugin\commands\SetSpawn.class
+me\minioh\firstPlugin\ItemPage\ReloadCommand.class
+me\minioh\firstPlugin\ItemPage\DynamicLoreFilter.class
 me\minioh\firstPlugin\ItemPage\LorePagesStat$1.class
+me\minioh\firstPlugin\ItemPage\ConfigManager.class
+me\minioh\firstPlugin\ItemPage\ReforgeListener.class
 me\minioh\firstPlugin\commands\Dreamreload.class
 me\minioh\firstPlugin\ItemPage\LoreGUIHandler$1.class
 me\minioh\firstPlugin\FirstPlugin.class

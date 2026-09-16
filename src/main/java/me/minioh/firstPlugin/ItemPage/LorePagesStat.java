@@ -26,8 +26,8 @@ public class LorePagesStat extends ItemStat<StringData, StringData> {
     private static final Type LIST_TYPE = new TypeToken<List<String>>(){}.getType();
 
     public LorePagesStat() {
-        super("LORE_PAGES", Material.WRITABLE_BOOK, "Lore Pages", 
-              new String[] { "Adds cyclable lore pages to your item." }, 
+        super("LORE_PAGES", Material.WRITABLE_BOOK, "Manual Lore Pages", 
+              new String[] { "Adds manual pages after auto-pages." }, 
               new String[] { "all" });
     }
 
@@ -39,32 +39,31 @@ public class LorePagesStat extends ItemStat<StringData, StringData> {
     @Override
     public void whenApplied(@NotNull ItemStackBuilder item, @NotNull StringData data) {
         item.addItemTag(getAppliedNBT(data));
+        // Note: We intentionally do NOT insert anything into `item.getLore()` here!
+        // This ensures the manual pages do not render on Auto Page 1 when the item is rebuilt natively.
     }
 
     @NotNull
     @Override
     public ArrayList<ItemTag> getAppliedNBT(@NotNull StringData data) {
         ArrayList<ItemTag> ret = new ArrayList<>();
-        ret.add(new ItemTag(getNBTPath(), data.toString())); // Save JSON to NBT[cite: 2]
+        ret.add(new ItemTag(getNBTPath(), data.toString())); 
         return ret;
     }
 
     @Override
     public void whenClicked(@NotNull EditionInventory inv, @NotNull InventoryClickEvent event) {
-        // Open the custom Multiple Lores Menu
         new LoreGUIHandler(inv).open();
     }
 
     @Override
-    public void whenInput(@NotNull EditionInventory inv, @NotNull String message, Object... info) {
-        // Handled asynchronously via ChatInputListener to avoid blocking
-    }
+    public void whenInput(@NotNull EditionInventory inv, @NotNull String message, Object... info) {}
 
     @Override
     public void whenLoaded(@NotNull ReadMMOItem mmoitem) {
         ArrayList<ItemTag> relevantTags = new ArrayList<>();
         if (mmoitem.getNBT().hasTag(getNBTPath())) {
-            relevantTags.add(ItemTag.getTagAtPath(getNBTPath(), mmoitem.getNBT(), SupportedNBTTagValues.STRING)); //[cite: 2]
+            relevantTags.add(ItemTag.getTagAtPath(getNBTPath(), mmoitem.getNBT(), SupportedNBTTagValues.STRING)); 
         }
         StringData bakedData = getLoadedNBT(relevantTags);
         if (bakedData != null) {
@@ -75,7 +74,7 @@ public class LorePagesStat extends ItemStat<StringData, StringData> {
     @Nullable
     @Override
     public StringData getLoadedNBT(@NotNull ArrayList<ItemTag> storedTags) {
-        ItemTag tg = ItemTag.getTagAtPath(getNBTPath(), storedTags); //[cite: 2]
+        ItemTag tg = ItemTag.getTagAtPath(getNBTPath(), storedTags); 
         if (tg != null) {
             return new StringData((String) tg.getValue());
         }
@@ -86,12 +85,12 @@ public class LorePagesStat extends ItemStat<StringData, StringData> {
     public void whenDisplayed(List<String> lore, Optional<StringData> statData) {
         if (statData.isPresent()) {
             List<String> pages = GSON.fromJson(statData.get().toString(), LIST_TYPE);
-            lore.add(ChatColor.GRAY + "Current Pages: " + ChatColor.GREEN + pages.size());
+            lore.add(ChatColor.GRAY + "Manual Pages: " + ChatColor.GREEN + pages.size());
         } else {
-            lore.add(ChatColor.GRAY + "Current Pages: " + ChatColor.RED + "None");
+            lore.add(ChatColor.GRAY + "Manual Pages: " + ChatColor.RED + "None");
         }
         lore.add("");
-        lore.add(ChatColor.YELLOW + "► Click to edit pages.");
+        lore.add(ChatColor.YELLOW + "► Click to edit manual pages.");
     }
 
     @NotNull
