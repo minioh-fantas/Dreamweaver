@@ -1,51 +1,55 @@
 package me.minioh.firstPlugin.ItemPage;
 
-import net.Indyuce.mmoitems.ItemStats;
 import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
+import net.Indyuce.mmoitems.stat.type.ItemStat;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DynamicLoreFilter {
 
-    /**
-     * Dynamically identifies the exact lore lines injected by the ABILITIES stat.
-     * Uses a Difference Engine approach to bypass the LoreBuilder's #abilities# 
-     * injection obfuscation without breaking Revision ID /mi updates.
-     */
-    public static List<String> extractAbilityLines(LiveMMOItem liveMmo) {
-        if (!liveMmo.hasData(ItemStats.ABILITIES)) return Collections.emptyList();
+    public static List<String> generatePageLore(LiveMMOItem liveMmo, int targetPage) {
+        MMOItem filtered = new MMOItem(liveMmo.getType(), liveMmo.getId());
 
-        // 1. Build the item WITH abilities
-        ItemStack fullItem = new ItemStackBuilder(liveMmo).buildSilently();
-        if (!fullItem.hasItemMeta() || !fullItem.getItemMeta().hasLore()) return Collections.emptyList();
-        List<String> fullLore = fullItem.getItemMeta().getLore();
+        for (ItemStat stat : liveMmo.getStats()) {
+            int page = getStatPage(stat);
+            
+            // STRICT ISOLATION: Unlisted stats (-1) MUST default to Page 1 only.
+            if (page == -1) page = 1;
 
-        // 2. Build the item WITHOUT abilities
-        MMOItem clone = liveMmo.clone();
-        clone.removeData(ItemStats.ABILITIES);
-        ItemStack itemWithout = new ItemStackBuilder(clone).buildSilently();
-        List<String> loreWithout = itemWithout.hasItemMeta() && itemWithout.getItemMeta().hasLore() 
-                ? itemWithout.getItemMeta().getLore() : new ArrayList<>();
+            if (page == targetPage)
+                filtered.setData(stat, liveMmo.getData(stat));
+        }
 
-        // 3. Extract the difference (the injected ability block)
-        List<String> abilityLines = new ArrayList<>();
-        int withIdx = 0, withoutIdx = 0;
+        ItemStack builtPage = new ItemStackBuilder(filtered).buildSilently();
+        if (builtPage.hasItemMeta() && builtPage.getItemMeta().hasLore())
+            return builtPage.getItemMeta().getLore();
         
-        while (withIdx < fullLore.size()) {
-            if (withoutIdx < loreWithout.size() && fullLore.get(withIdx).equals(loreWithout.get(withoutIdx))) {
-                withIdx++;
-                withoutIdx++;
-            } else {
-                abilityLines.add(fullLore.get(withIdx));
-                withIdx++;
+        return new ArrayList<>();
+    }
+
+    private static int getStatPage(ItemStat stat) {
+        String path = stat.getPath();
+        
+        if (stat.getId().equals("ABILITY")) path = "abilities";
+        if (stat.getId().equals("ELEMENT")) path = "elements";
+        if (stat.getId().equals("PERM_EFFECTS")) path = "perm-effects";
+        if (stat.getId().equals("EFFECTS")) path = "effects";
+        if (stat.getId().equals("SET")) path = "set";
+
+        String placeholder = "#" + path + "#";
+
+        for (int i = 1; i <= ConfigManager.getMaxAutoPages(); i++) {
+            List<String> format = ConfigManager.getPageFormat(i);
+            if (format != null) {
+                for (String line : format)
+                    if (line.contains(placeholder)) return i;
             }
         }
         
-        return abilityLines;
+        return -1;
     }
 }
