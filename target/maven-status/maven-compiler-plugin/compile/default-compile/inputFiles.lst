@@ -7,10 +7,14 @@ C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\command
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\commands\TpSpawn.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\FirstPlugin.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ChatInputListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ConfigManager.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\DynamicLoreFilter.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LoreGUIHandler.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LorePagesStat.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\MultiLorePlugin.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\PageFlipListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ReforgeListener.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ReloadCommand.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\MMOInventoryEvent.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\OPSnowball.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\listeners\PlayerDeathListener.java

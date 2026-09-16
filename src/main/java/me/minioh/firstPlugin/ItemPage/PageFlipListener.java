@@ -3,10 +3,13 @@ package me.minioh.firstPlugin.ItemPage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.lumine.mythic.lib.api.item.NBTItem;
+import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
+import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
+import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
+import net.Indyuce.mmoitems.stat.type.ItemStat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -27,8 +30,7 @@ public class PageFlipListener implements Listener {
 
     private static final Gson GSON = new Gson();
     private static final Type LIST_TYPE = new TypeToken<List<String>>(){}.getType();
-    private final NamespacedKey pageKey = new NamespacedKey(MultiLorePlugin.getInstance(), "current_page");
-    private final NamespacedKey originalLoreKey = new NamespacedKey(MultiLorePlugin.getInstance(), "original_lore");
+    public static final NamespacedKey PAGE_KEY = new NamespacedKey("mmoaddon", "current_page");
 
     @EventHandler
     public void onSwapHand(PlayerSwapHandItemsEvent event) {
@@ -50,43 +52,49 @@ public class PageFlipListener implements Listener {
         if (item == null || !item.hasItemMeta()) return false;
 
         NBTItem nbtItem = NBTItem.get(item);
-        if (!nbtItem.hasTag("MMOITEMS_LORE_PAGES")) return false; 
+        if (!nbtItem.hasType()) return false; 
 
-        String pagesJson = nbtItem.getString("MMOITEMS_LORE_PAGES");
-        List<String> customPages = GSON.fromJson(pagesJson, LIST_TYPE);
-        if (customPages == null || customPages.isEmpty()) return false;
-
-        ItemMeta meta = item.getItemMeta();
-        int totalPages = customPages.size() + 1; 
-        int currentPage = meta.getPersistentDataContainer().getOrDefault(pageKey, PersistentDataType.INTEGER, 1);
-
-        // Fix: Save original lore properly line-by-line as a JSON array of components
-        if (currentPage == 1 && meta.hasLore()) {
-            List<String> serializedLines = new ArrayList<>();
-            for (Component comp : meta.lore()) {
-                serializedLines.add(GsonComponentSerializer.gson().serialize(comp));
-            }
-            meta.getPersistentDataContainer().set(originalLoreKey, PersistentDataType.STRING, GSON.toJson(serializedLines));
+        List<String> manualPages = new ArrayList<>();
+        if (nbtItem.hasTag("MMOITEMS_LORE_PAGES")) {
+            manualPages = GSON.fromJson(nbtItem.getString("MMOITEMS_LORE_PAGES"), LIST_TYPE);
         }
 
-        currentPage = (currentPage % totalPages) + 1;
-        meta.getPersistentDataContainer().set(pageKey, PersistentDataType.INTEGER, currentPage);
+        int maxAutoPages = ConfigManager.getMaxAutoPages();
+        int totalPages = maxAutoPages + manualPages.size();
+        if (totalPages <= 1) return false;
 
-        if (currentPage == 1) {
-            // Fix: Restore Original Lore from the saved JSON string array
-            String serializedLore = meta.getPersistentDataContainer().get(originalLoreKey, PersistentDataType.STRING);
-            if (serializedLore != null) {
-                List<String> jsonLines = GSON.fromJson(serializedLore, LIST_TYPE);
-                List<Component> deserialized = new ArrayList<>();
-                for (String jsonLine : jsonLines) {
-                    deserialized.add(GsonComponentSerializer.gson().deserialize(jsonLine));
-                }
-                meta.lore(deserialized); 
-            }
-        } else {
-            String pageRawText = customPages.get(currentPage - 2);
-            List<Component> newLore = new ArrayList<>();
+        ItemMeta meta = item.getItemMeta();
+        int currentPage = meta.getPersistentDataContainer().getOrDefault(PAGE_KEY, PersistentDataType.INTEGER, 1);
+        currentPage = (currentPage % totalPages) + 1;
+        meta.getPersistentDataContainer().set(PAGE_KEY, PersistentDataType.INTEGER, currentPage);
+
+        List<String> newLoreLegacy = new ArrayList<>();
+
+        if (currentPage <= maxAutoPages) {
+            LiveMMOItem liveMmo = new LiveMMOItem(nbtItem);
             
+            // Rebuilding with filtered stats automatically clears unused placeholder tags (like #abilities#).
+            // You can still call DynamicLoreFilter.extractAbilityLines(liveMmo) here if your architecture requires strictly returning line strings.
+            MMOItem filteredMmo = new MMOItem(liveMmo.getType(), liveMmo.getId());
+            
+            for (ItemStat stat : liveMmo.getStats()) {
+                // CRITICAL FIX: Map the internal "ABILITY" ID to the user-facing "ABILITIES" config key
+                String configId = stat.getId().equals("ABILITY") ? "ABILITIES" : stat.getId();
+                int targetPage = ConfigManager.getStatPage(configId);
+                
+                if (targetPage == -1 || targetPage == currentPage) {
+                    filteredMmo.setData(stat, liveMmo.getData(stat));
+                }
+            }
+
+            ItemStack builtPage = new ItemStackBuilder(filteredMmo).buildSilently();
+            if (builtPage.hasItemMeta() && builtPage.getItemMeta().hasLore()) {
+                newLoreLegacy = builtPage.getItemMeta().getLore();
+            }
+            
+        } else {
+            // Render manual pages using Adventure API
+            String pageRawText = manualPages.get(currentPage - maxAutoPages - 1);
             for (String line : pageRawText.split("\n")) {
                 Component formattedLine;
                 if (line.contains("&")) {
@@ -94,12 +102,14 @@ public class PageFlipListener implements Listener {
                 } else {
                     formattedLine = MiniMessage.miniMessage().deserialize(line);
                 }
-                newLore.add(formattedLine.decoration(TextDecoration.ITALIC, false));
+                formattedLine = formattedLine.decoration(TextDecoration.ITALIC, false);
+                newLoreLegacy.add(LegacyComponentSerializer.legacySection().serialize(formattedLine));
             }
-            meta.lore(newLore);
         }
 
+        meta.setLore(newLoreLegacy);
         item.setItemMeta(meta);
+
         return true;
     }
 }

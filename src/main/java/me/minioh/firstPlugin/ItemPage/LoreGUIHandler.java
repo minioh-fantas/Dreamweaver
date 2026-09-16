@@ -31,7 +31,7 @@ public class LoreGUIHandler implements InventoryHolder {
 
     public LoreGUIHandler(EditionInventory editionInv) {
         this.editionInv = editionInv;
-        this.inventory = Bukkit.createInventory(this, 54, "Multiple Lores Menu");
+        this.inventory = Bukkit.createInventory(this, 54, "Manual Lores Menu");
         
         String json = editionInv.getEditedSection().getString("lore-pages", "[]");
         this.pages = GSON.fromJson(json, LIST_TYPE);
@@ -42,7 +42,7 @@ public class LoreGUIHandler implements InventoryHolder {
     private void setupGUI() {
         ItemStack createBtn = new ItemStack(Material.EMERALD);
         ItemMeta createMeta = createBtn.getItemMeta();
-        createMeta.setDisplayName(ChatColor.GREEN + "Create New Page");
+        createMeta.setDisplayName(ChatColor.GREEN + "Create New Manual Page");
         createBtn.setItemMeta(createMeta);
         inventory.setItem(0, createBtn);
 
@@ -52,17 +52,19 @@ public class LoreGUIHandler implements InventoryHolder {
         backBtn.setItemMeta(backMeta);
         inventory.setItem(8, backBtn);
 
+        int maxAutoPages = ConfigManager.getMaxAutoPages();
+
         for (int i = 0; i < pages.size(); i++) {
             ItemStack pageBtn = new ItemStack(Material.PAPER);
             ItemMeta pageMeta = pageBtn.getItemMeta();
-            pageMeta.setDisplayName(ChatColor.YELLOW + "Page " + (i + 2)); 
+            pageMeta.setDisplayName(ChatColor.YELLOW + "Page " + (maxAutoPages + i + 1)); 
             List<String> lore = new ArrayList<>();
             
             for(String line : pages.get(i).split("\n")) {
                 lore.add(ChatColor.GRAY + line);
             }
             lore.add("");
-            lore.add(ChatColor.GREEN + "Left-Click to add a new line."); // Text updated
+            lore.add(ChatColor.GREEN + "Left-Click to add a new line."); 
             lore.add(ChatColor.RED + "Shift-Right-Click to delete.");
             pageMeta.setLore(lore);
             pageBtn.setItemMeta(pageMeta);
@@ -114,7 +116,6 @@ public class LoreGUIHandler implements InventoryHolder {
                 } else if (event.isLeftClick()) {
                     player.closeInventory();
                     MultiLorePlugin.getInstance().getPendingInputs().put(player.getUniqueId(), new MultiLorePlugin.PendingInput(editionInv, pageIndex));
-                    // Prompt updated
                     player.sendMessage(ChatColor.YELLOW + "Type the lore to append to this page in chat. Use \\n for multiple lines."); 
                 }
             }

@@ -8,6 +8,10 @@ depend: [MMOItems, MythicLib]
 
 description: 'Dreamweaver core plugin'
 commands:
+  multilores:
+    description: Configuration command for the MultiLore Addon
+    permission: multilores.admin
+    aliases: [ mmomultilores ]
   hjhj:
     description: An occhim command.
     permission: minioh.test.hjhj
@@ -35,3 +39,6 @@ permissions:
     description: You are really occhim
   minioh.test.repeat:
     description: Use repeat command.
+  multilores.admin:
+    description: Allows reloading the mmomultilores.yml configuration
+    default: op

@@ -30,20 +30,18 @@ public class ChatInputListener implements Listener {
         String json = inv.getEditedSection().getString("lore-pages", "[]");
         List<String> pages = GSON.fromJson(json, LIST_TYPE);
 
-        // Convert the literal string "\n" typed in chat into a proper newline
         String newMessage = event.getMessage().replace("\\n", "\n"); 
         
         if (input.targetPageIndex() >= pages.size()) {
             pages.add(newMessage);
         } else {
-            // Append instead of rewriting
             String existing = pages.get(input.targetPageIndex());
             pages.set(input.targetPageIndex(), existing + "\n" + newMessage);
         }
 
         Bukkit.getScheduler().runTask(MultiLorePlugin.getInstance(), () -> {
             inv.getEditedSection().set("lore-pages", GSON.toJson(pages));
-            inv.registerTemplateEdition();
+            inv.registerTemplateEdition(); 
             new LoreGUIHandler(inv).open();
         });
     }
