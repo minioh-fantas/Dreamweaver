@@ -9,9 +9,11 @@ C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\FirstPl
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ChatInputListener.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ConfigManager.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\DynamicLoreFilter.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ItemCreationListener.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LoreGUIHandler.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\LorePagesStat.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\MultiLorePlugin.java
+C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\MultiPageLoreBuilder.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\PageFlipListener.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ReforgeListener.java
 C:\Users\Admin\Documents\Dreamweaver\src\main\java\me\minioh\firstPlugin\ItemPage\ReloadCommand.java

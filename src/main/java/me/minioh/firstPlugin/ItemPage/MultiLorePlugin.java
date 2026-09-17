@@ -32,7 +32,7 @@ public class MultiLorePlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PageFlipListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChatInputListener(), this);
         Bukkit.getPluginManager().registerEvents(new LoreGUIHandler.GUIListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ReforgeListener(lorePagesStat), this);
+        Bukkit.getPluginManager().registerEvents(new ItemCreationListener(), this);
 
         getLogger().info("MultiLorePlugin has been enabled successfully.");
     }
