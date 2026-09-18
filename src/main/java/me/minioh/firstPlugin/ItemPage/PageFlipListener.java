@@ -2,6 +2,7 @@ package me.minioh.firstPlugin.ItemPage;
 
 import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,11 +56,15 @@ public class PageFlipListener implements Listener {
         while (true) {
             currentPage = (currentPage % totalPages) + 1;
             if (MultiPageLoreBuilder.hasPageContent(liveMmo, currentPage, manualPages) || currentPage == 1) break;
-            if (currentPage == startPage) return false; // Failsafe
+            if (currentPage == startPage) return false;
         }
 
         meta.getPersistentDataContainer().set(PAGE_KEY, PersistentDataType.INTEGER, currentPage);
-        meta.setLore(MultiPageLoreBuilder.buildPage(liveMmo, currentPage, nbtItem));
+        
+        // Adventure Component support mapping
+        List<Component> pageLore = MultiPageLoreBuilder.buildPage(liveMmo, currentPage, nbtItem);
+        meta.lore(pageLore);
+        
         item.setItemMeta(meta);
         
         return true;

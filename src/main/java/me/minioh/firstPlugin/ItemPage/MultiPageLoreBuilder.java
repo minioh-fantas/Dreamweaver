@@ -16,37 +16,51 @@ import java.util.Map;
 
 public class MultiPageLoreBuilder {
 
-    public static List<String> buildPage(LiveMMOItem liveMmo, int page, NBTItem nbtItem) {
+    public static List<Component> buildPage(LiveMMOItem liveMmo, int page, NBTItem nbtItem) {
         List<String> format = ConfigManager.getPageFormat(page);
-        List<String> finalLore = new ArrayList<>();
+        List<String> combinedFormat = new ArrayList<>();
 
-        // 1. Native Auto-Generated Lore
+        // 1. Base Configured Format
         if (format != null && !format.isEmpty()) {
-            ItemStackBuilder builder = new ItemStackBuilder(liveMmo);
-            
-            // INJECT custom page format to completely override native lore-format.yml
-            builder.getLore().setLore(new ArrayList<>(format));
-
-            // buildSilently() natively resolves all #tags# (including Abilities/Elements/Sets) 
-            // and securely processes {bar} without triggering an infinite ItemBuildEvent loop.
-            ItemStack builtPage = builder.buildSilently();
-            if (builtPage.hasItemMeta() && builtPage.getItemMeta().hasLore())
-                finalLore.addAll(builtPage.getItemMeta().getLore());
+            combinedFormat.addAll(format);
         }
 
         // 2. Append Manual Lore Lines
         Map<String, List<String>> manualPages = LorePagesStat.getManualPages(nbtItem);
         List<String> customLines = manualPages.get("page_" + page);
+        
         if (customLines != null && !customLines.isEmpty()) {
             for (String line : customLines) {
-                Component formattedLine = line.contains("&")
-                        ? LegacyComponentSerializer.builder().character('&').hexColors().build().deserialize(line)
-                        : MiniMessage.miniMessage().deserialize(line);
-                finalLore.add(LegacyComponentSerializer.legacySection().serialize(formattedLine.decoration(TextDecoration.ITALIC, false)));
+                // Parse MiniMessage or Legacy into native section symbols BEFORE passing to MMOItems.
+                // This allows MMOItems' LoreBuilder to natively wrap these lines inside Custom Tooltips 
+                // and perfectly evaluate raw placeholders like #attack-damage# or {bar}.
+                Component comp;
+                if (line.contains("&")) {
+                    comp = LegacyComponentSerializer.builder().character('&').hexColors().build().deserialize(line);
+                } else {
+                    comp = MiniMessage.miniMessage().deserialize(line);
+                }
+                comp = comp.decoration(TextDecoration.ITALIC, false);
+                combinedFormat.add(LegacyComponentSerializer.legacySection().serialize(comp));
             }
         }
 
-        return finalLore;
+        if (combinedFormat.isEmpty()) return new ArrayList<>();
+
+        // 3. Inject into MMOItems Engine
+        ItemStackBuilder builder = new ItemStackBuilder(liveMmo);
+        builder.getLore().setLore(combinedFormat);
+
+        // buildSilently() applies all stats, evaluates {bar}, parses placeholders,
+        // and inherently applies the TooltipTexture Prefix/Suffix to our combined block.
+        ItemStack builtPage = builder.buildSilently();
+        
+        // Extract the beautifully formatted Adventure Components directly from the built meta
+        if (builtPage.hasItemMeta() && builtPage.getItemMeta().hasLore()) {
+            return builtPage.getItemMeta().lore();
+        }
+
+        return new ArrayList<>();
     }
 
     public static boolean hasPageContent(LiveMMOItem mmo, int page, Map<String, List<String>> manualPages) {
@@ -56,9 +70,8 @@ public class MultiPageLoreBuilder {
         if (format == null || format.isEmpty()) return false;
 
         for (String line : format)
-            if (line.contains("%")) return true; // Keep if it has PAPI placeholders
+            if (line.contains("%")) return true; 
 
-        // Validate if the MMOItem possesses any stat required by the format
         for (ItemStat stat : mmo.getStats()) {
             String path = stat.getPath();
             if (stat.getId().equals("ABILITY")) path = "abilities";
